@@ -1,4 +1,6 @@
 from flask import Flask, request, render_template
+import pymysql
+pymysql.install_as_MySQLdb()
 from flask_sqlalchemy import SQLAlchemy
 from secrets import DB_NAME, DB_USERNAME, DB_PASSWORD
 
