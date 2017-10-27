@@ -32,9 +32,9 @@ def save():
 
 # given a user name, find the unique id associated with that user
 def find_user_id_by_name(username):
-    user_record = db.engine.execute('SELECT * FROM usernames WHERE username = \'' + username + '\';')
+    user_record = db.engine.execute('SELECT * FROM users WHERE username = \'' + username + '\';')
     for row in user_record:
-        return row['id']
+        return row['user_id']
 
 # adds a new file to the database corresponding to the current user
 def add_new_file(file_name, file_contents, username):
