@@ -29,27 +29,51 @@ def save():
     else:
         file_name = request.args.get('filename_field')
         file_contents = request.args.get('editor')
-    add_new_file(file_name, file_contents, current_username)
+    add_new_note(file_name, file_contents, current_username)
     return file_name + file_contents
 
 # given a user name, find the unique id associated with that user
-def find_user_id_by_name(username):
-    user_record = db.engine.execute('SELECT * FROM users WHERE username = \'' + username + '\';')
-    for row in user_record:
-        return row['user_id']
+def find_user_id_by_name(name):
+    return User.query.filter_by(username=name).first().id
 
-# adds a new file to the database corresponding to the current user
-def add_new_file(file_name, file_contents, username):
-    file_name = escape(file_name)
-    file_contents = escape(file_contents)
-    query = 'INSERT INTO notes VALUES (DEFAULT, \'' + file_name + '\', \'' + file_contents + '\', ' + str(find_user_id_by_name(username)) + ');'
-    db.engine.execute(query)
+# adds a new note to the database corresponding to the current user
+def add_new_note(filename, file_contents, username):
+    note = Note(filename, file_contents, find_user_id_by_name(username))
+    db.session.add(note)
+    db.session.commit()
 
-# escape characters in a string and return the newly escaped string
-def escape(s):
-    s = s.replace('\'', '\\\'')
-    s = s.replace('\"', '\\\"')
-    return s
+# User model for the users table
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    email = db.Column(db.String(120), unique=True)
+    hashed_password = db.Column(db.String(100), unique=False)
+
+    def __init__(self, username, email, hashed_password):
+        self.username = username
+        self.email = email
+        self.hashed_password = hashed_password
+
+    def __repr__(self):
+        return 'User: ' + self.username
+
+# Note model for the notes table
+class Note(db.Model):
+    __tablename__ = 'notes'
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(100), unique=True)
+    file_contents = db.Column(db.String(20000), unique=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __init__(self, filename, file_contents, user_id):
+        self.filename = filename
+        self.file_contents = file_contents
+        self.user_id = user_id
+
+    def __repr__(self):
+        return 'Note: ' + self.filename
+
 
 # will run twice if debug is set to True
 if __name__ == '__main__':
