@@ -3,10 +3,10 @@ import pymysql
 pymysql.install_as_MySQLdb()
 from flask_sqlalchemy import SQLAlchemy
 from secrets import DB_NAME, DB_USERNAME, DB_PASSWORD
-import models
-import database_utils
+
 from flask_login import LoginManager
 from flask_login import *
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@localhost/' + DB_NAME
@@ -15,10 +15,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'supersecretkey'
 app.config['TESTING'] = False
 
+bcrypt = Bcrypt(app)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 db = SQLAlchemy(app)
+
+import models
+import database_utils
 
 @app.route('/')
 @login_required
@@ -31,14 +36,27 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = database_utils.find_user_by_name(db, username)
-        # update this to check the hash using bcrypt
-        if user is not None and password == user.hashed_password and user.is_active:
+        if user is not None and bcrypt.check_password_hash(user.hashed_password, password) and user.is_active:
             login_user(user, remember = False)
             # go to the editor screen
             return redirect('/')
 
         
     return render_template('login.html')
+
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        user = models.User(username, email, bcrypt.generate_password_hash(password, rounds = 12))
+        db.session.add(user)
+        db.session.commit()
+        return redirect('/login')
+
+    return render_template('register.html')
+
 
 # saves a file to the database and returns the filename and contents
 @app.route('/save', methods = ['GET', 'POST'])
@@ -63,7 +81,7 @@ def unauthorized_callback():
 @login_manager.user_loader
 def load_user(id):
     user = database_utils.find_user_by_id(db, int(id))
-    if user.is_active:
+    if user is not None and user.is_active:
         return user
     else:
         return None
