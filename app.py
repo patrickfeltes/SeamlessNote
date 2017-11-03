@@ -4,7 +4,6 @@ pymysql.install_as_MySQLdb()
 from flask_sqlalchemy import SQLAlchemy
 from secrets import DB_NAME, DB_USERNAME, DB_PASSWORD
 
-from flask_login import LoginManager
 from flask_login import *
 from flask_bcrypt import Bcrypt
 
@@ -30,6 +29,7 @@ import database_utils
 def home():
     return render_template('editor.html')
 
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -41,8 +41,8 @@ def login():
             # go to the editor screen
             return redirect('/')
 
-        
     return render_template('login.html')
+
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -71,10 +71,12 @@ def save():
     database_utils.add_new_note(db, file_name, file_contents, current_user.username)
     return file_name + file_contents
 
+
 # if there isn't proper authorization, go to the login page
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     return redirect('/login')
+
 
 @login_manager.user_loader
 def load_user(id):
@@ -83,6 +85,7 @@ def load_user(id):
         return user
     else:
         return None
+
 
 # will run twice if debug is set to True
 if __name__ == '__main__':
