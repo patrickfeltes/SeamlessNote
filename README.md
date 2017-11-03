@@ -26,13 +26,13 @@ DB_NAME = ''
 - Enter the python shell by typing python2
 - Enter the following commands in order
 ```python
-from app import db
-from app import User
-db.create_all()
-user = User('username', 'email@example.com', 'password')
-db.session.add(user)
-db.session.commit()
-print User.query.all()
+>>> from app import db
+>>> from app import User
+>>> db.create_all()
+>>> user = User('username', 'email@example.com', 'password')
+>>> db.session.add(user)
+>>> db.session.commit()
+>>> print User.query.all()
 ```
 - Your output should look like [User: username]
 
