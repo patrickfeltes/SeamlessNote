@@ -1,14 +1,22 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash, redirect
 import pymysql
 pymysql.install_as_MySQLdb()
 from flask_sqlalchemy import SQLAlchemy
 from secrets import DB_NAME, DB_USERNAME, DB_PASSWORD
 import models
+import database_utils
+from flask_login import LoginManager
+from flask_login import *
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + DB_USERNAME + ':' + DB_PASSWORD + '@localhost/' + DB_NAME
 # This option has a high overhead if enabled. Only use if necessary
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'supersecretkey'
+app.config['TESTING'] = False
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 # this is temporary until we have a login system
 current_username = 'username'
@@ -16,11 +24,31 @@ current_username = 'username'
 db = SQLAlchemy(app)
 
 @app.route('/')
+@login_required
 def home():
+    print current_user
     return render_template('editor.html')
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = database_utils.find_user_by_name(db, username)
+        # update this to check the hash using bcrypt
+        if user is not None and password == user.hashed_password and user.is_active:
+            login_user(user, remember = False)
+            # go to the editor screen
+            return redirect('/')
+        else:
+            flash('didn\'t work')
+
+        
+    return render_template('login.html')
 
 # saves a file to the database and returns the filename and contents
 @app.route('/save', methods = ['GET', 'POST'])
+@login_required
 def save():
     file_name = ''
     file_contents = ''
@@ -30,23 +58,20 @@ def save():
     else:
         file_name = request.args.get('filename_field')
         file_contents = request.args.get('editor')
-    add_new_note(file_name, file_contents, current_username)
+    database_utils.add_new_note(db, file_name, file_contents, current_username)
     return file_name + file_contents
 
-# given a user name, find the unique id associated with that user
-def find_user_id_by_name(name):
-    return models.User.query.filter_by(username=name).first().id
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect('/login')
 
-def add_user(name, email, password):
-    user = models.User(name, email, password)
-    db.session.add(user)
-    db.session.commit()
-
-# adds a new note to the database corresponding to the current user
-def add_new_note(filename, file_contents, username):
-    note = models.Note(filename, file_contents, find_user_id_by_name(username))
-    db.session.add(note)
-    db.session.commit()
+@login_manager.user_loader
+def load_user(id):
+    user = database_utils.find_user_by_id(db, int(id))
+    if user.is_active:
+        return user
+    else:
+        return None
 
 # will run twice if debug is set to True
 if __name__ == '__main__':

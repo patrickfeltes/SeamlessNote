@@ -1,9 +1,10 @@
 # All database models will be in this file
 
 from app import db
+from flask_login import UserMixin
 
 # User model for the users table
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
