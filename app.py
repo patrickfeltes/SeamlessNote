@@ -50,9 +50,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        user = models.User(username, email, bcrypt.generate_password_hash(password, rounds = 12))
-        db.session.add(user)
-        db.session.commit()
+        database_utils.add_user(db, username, email, bcrypt.generate_password_hash(password, rounds = 12))
         return redirect('/login')
 
     return render_template('register.html')
