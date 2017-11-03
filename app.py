@@ -18,15 +18,11 @@ app.config['TESTING'] = False
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# this is temporary until we have a login system
-current_username = 'username'
-
 db = SQLAlchemy(app)
 
 @app.route('/')
 @login_required
 def home():
-    print current_user
     return render_template('editor.html')
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -40,8 +36,6 @@ def login():
             login_user(user, remember = False)
             # go to the editor screen
             return redirect('/')
-        else:
-            flash('didn\'t work')
 
         
     return render_template('login.html')
@@ -58,9 +52,10 @@ def save():
     else:
         file_name = request.args.get('filename_field')
         file_contents = request.args.get('editor')
-    database_utils.add_new_note(db, file_name, file_contents, current_username)
+    database_utils.add_new_note(db, file_name, file_contents, current_user.username)
     return file_name + file_contents
 
+# if there isn't proper authorization, go to the login page
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     return redirect('/login')
