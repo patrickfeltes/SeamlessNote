@@ -1,13 +1,14 @@
 # Seamless Note
 
 ## Installation Instructions
-- Install [MySQL Community Server](https://dev.mysql.com/downloads/mysql/).
-- Install [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
 - Follow MySQL Set Up Instructions.
 - Install [Git](https://git-scm.com/) and set it up. Instructions are [here](https://help.github.com/articles/set-up-git/).
 - Install [Python](https://www.python.org/) >= 2.7 and make sure you have pip installed.
 - Install all Python modules (see Python Modules).
 - Clone this repository, run `git clone https://github.com/CS196Illinois/SeamlessNote.git`
+- Install [MySQL Community Server](https://dev.mysql.com/downloads/mysql/).
+- Install [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
+- Follow MySQL set up instructions (see below).
 - Create a file in the repository called secrets.py and give it the following format.
 ```python
 DB_USERNAME = ''
@@ -15,7 +16,13 @@ DB_PASSWORD = ''
 DB_NAME = ''
 ```
 - Fill in the above values with what you specified when you created your connection/schema in MySQL workbench.
-- Follow the running instructions to run the Flask app. On your first run, make sure you go to https://localhost:5000/register and create a username and password that you can use to login when you run it again.
+- Navigate to the Seamless Note folder and open the python shell by typing `python` or `python2` in terminal/command prompt.
+- To create all of the database tables, run the following commands.
+```python
+>>> from app import db
+>>> db.create_all()
+```
+- Follow the running instructions to run the Flask app. On your first run, make sure you go to https://localhost:5000/register and create a username and password so you can login when necessary.
 
 ## MySQL Set Up
 - Once you have MySQL Community Server and Workbench installed, open Workbench.
