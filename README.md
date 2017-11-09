@@ -40,5 +40,5 @@ DB_NAME = ''
 ## Running
 - Make sure that your MySQL local server is running (using System Preferences or Workbench).
 - Navigate to the seamlessnote repository folder on your computer.
-- Run `python app.py`.
+- Run `python run.py`.
 - Open your favorite browser and go to localhost:5000.
