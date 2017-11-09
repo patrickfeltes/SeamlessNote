@@ -21,8 +21,7 @@ login_manager.init_app(app)
 
 db = SQLAlchemy(app)
 
-import models
-import database_utils
+import database
 
 @app.route('/')
 @login_required
@@ -35,7 +34,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = database_utils.find_user_by_name(db, username)
+        user = database.find_user_by_name(username)
         if user is not None and bcrypt.check_password_hash(user.hashed_password, password) and user.is_active:
             login_user(user, remember = False)
             # go to the editor screen
@@ -50,7 +49,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        database_utils.add_user(db, username, email, bcrypt.generate_password_hash(password, rounds = 12))
+        database.add_user(username, email, bcrypt.generate_password_hash(password, rounds = 12))
         return redirect('/login')
 
     return render_template('register.html')
@@ -68,7 +67,7 @@ def save():
     else:
         file_name = request.args.get('filename_field')
         file_contents = request.args.get('editor')
-    database_utils.add_new_note(db, file_name, file_contents, current_user.username)
+    database.add_new_note(file_name, file_contents, current_user.username)
     return file_name + file_contents
 
 
@@ -80,7 +79,7 @@ def unauthorized_callback():
 
 @login_manager.user_loader
 def load_user(id):
-    user = database_utils.find_user_by_id(db, int(id))
+    user = database.find_user_by_id(int(id))
     if user is not None and user.is_active:
         return user
     else:
