@@ -7,7 +7,7 @@
   </head>
 
   <body>
-    <form action = "{{ url_for('save') }}" id = "content" method = "post">
+    <form action = "{{ url_for('file_routes.save') }}" id = "content" method = "post">
       Filename: <input type = "text" name = "filename_field">
       <textarea id = "editor" name = "editor"></textarea>
       <input type = "submit" value = "Save" name = "save">
