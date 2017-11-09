@@ -1,5 +1,4 @@
-# All database models will be in this file
-
+# all database interaction is in this file
 from app import db
 from flask_login import UserMixin
 
@@ -34,3 +33,34 @@ class Note(db.Model):
 
     def __repr__(self):
         return 'Note: ' + self.filename
+
+# given a user name, find the unique id associated with that user
+# if that user doesn't exist, return None
+def find_user_id_by_name(name):
+    user = find_user_by_name(name)
+    if user is None:
+        return None
+    else:
+        return user.id
+
+# finds a User by username
+def find_user_by_name(name):
+    return User.query.filter_by(username = name).first()
+
+# finds a User by their id
+def find_user_by_id(id):
+    return User.query.filter_by(id = id).first()
+
+# adds a user to the database
+def add_user(name, email, password):
+    user = User(name, email, password)
+    db.session.add(user)
+    db.session.commit()
+    db.session.refresh(user)
+
+# adds a new note to the database corresponding to the current user
+def add_new_note(filename, file_contents, username):
+    note = Note(filename, file_contents, find_user_id_by_name(username))
+    db.session.add(note)
+    db.session.commit()
+    db.session.refresh(note)
