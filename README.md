@@ -19,6 +19,7 @@ DB_NAME = ''
 - Navigate to the Seamless Note folder and open the python shell by typing `python` or `python2` in terminal/command prompt.
 - To create all of the database tables, run the following commands.
 ```python
+>>> import database
 >>> from app import db
 >>> db.create_all()
 ```
