@@ -8,7 +8,7 @@
                 box-sizing: border-box;
             }
             body {
-                background: url("https://github.com/CS196Illinois/SeamlessNote/blob/master/Wood.jpg?raw=true") no-repeat;
+                background: url({{ url_for('static', filename = 'Wood.jpg') }}) no-repeat;
                 background-size: 70% 100%;
                 margin: auto;
                 overflow: hidden;
@@ -42,7 +42,7 @@
             input[type=submit]:hover {
                 opacity: 0.8;
             }
-            input[type=submit2] {
+            input[type=button] {
                 background-color: rgb(0, 97, 255);
                 color: white;
                 text-align: center;
@@ -54,7 +54,7 @@
                 cursor: pointer;
                 width: 100%;
             }
-            input[type=submit2]:hover {
+            input[type=button]:hover {
                 opacity: 0.8;
             }
             .login_box {
@@ -83,7 +83,7 @@
                 <input type = "password" name = "password" placeholder = "Password" required>
                 <br>
                 <input type = "Submit" name = "submit" value = "Sign In">
-                <input type = "Submit2" name = "submit2" value = "Sign Up">
+                <input type = "Button" name = "submit2" value = "Sign Up" onclick="window.location.href = '{{ url_for('authentication.register') }}';">
             </form>
         </div>
     </body>
