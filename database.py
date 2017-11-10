@@ -64,3 +64,10 @@ def add_new_note(filename, file_contents, username):
     db.session.add(note)
     db.session.commit()
     db.session.refresh(note)
+
+# gets all notes for a specific user
+def get_notes_by_user(username):
+    user = find_user_by_name(username)
+    notes = Note.query.filter_by(user_id = user.id)
+    return list(notes)
+
