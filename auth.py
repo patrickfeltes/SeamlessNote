@@ -1,14 +1,16 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
 import database
 import app
 from app import login_manager, bcrypt
-from flask_login import login_user
+from flask_login import login_user, current_user
 
 authentication = Blueprint('authentication', __name__, template_folder = 'templates')
 
 # login page
 @authentication.route('/login', methods = ['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('file_routes.home'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -23,6 +25,8 @@ def login():
 # registration page for new users
 @authentication.route('/register', methods = ['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('file_routes.home'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -31,7 +35,6 @@ def register():
         return redirect('/login')
 
     return render_template('register.html')
-
 
 # if there isn't proper authorization, go to the login page
 @login_manager.unauthorized_handler

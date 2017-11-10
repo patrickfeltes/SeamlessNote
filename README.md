@@ -4,7 +4,7 @@
 - Follow MySQL Set Up Instructions.
 - Install [Git](https://git-scm.com/) and set it up. Instructions are [here](https://help.github.com/articles/set-up-git/).
 - Install [Python](https://www.python.org/) >= 2.7 and make sure you have pip installed.
-- Install all Python modules (see Python Modules).
+- Install all Python modules: run `pip2 install -r requirements.txt` when in the SeamlessNote directory.
 - Clone this repository, run `git clone https://github.com/CS196Illinois/SeamlessNote.git`
 - Install [MySQL Community Server](https://dev.mysql.com/downloads/mysql/).
 - Install [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
@@ -30,13 +30,6 @@ DB_NAME = ''
 - Go to MySQL connections and create a new connection.
 - Once in the connection create a new schema using the schemas tab on the left.
 - Refresh your schemas and double click on your new schema to set it as default.
-
-## Python Modules
-- Flask `pip install Flask`
-- Flask-SQLAlchemy `pip install Flask-SQLAlchemy`
-- PyMySQL `pip install pymysql`
-- Flask-Login `pip install flask-login`
-- Flask-Bcrypt `pip install flask-bcrypt`
 
 ## Running
 - Make sure that your MySQL local server is running (using System Preferences or Workbench).
