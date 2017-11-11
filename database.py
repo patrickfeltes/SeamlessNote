@@ -97,3 +97,20 @@ def get_notes_by_user(username):
     notes = Note.query.filter_by(user_id = user.id)
     return list(notes)
 
+def find_note_by_name(filename):
+    return Note.query.filter_by(filename = filename).first()
+
+# adds a tag to the tag table if it doesn't exist, then links them in the junction table
+def add_tag_to_note(filename, tag_name):
+    note = find_note_by_name(filename)
+    tag = Tag.query.filter_by(tag_name = tag_name).first()
+    if tag is None:
+        tag = Tag(tag_name)
+        db.session.add(tag)
+        db.session.commit()
+        db.session.refresh(tag)
+
+    note_tag_junction = NoteTagJunction(note.id, tag.id)
+    db.session.add(note_tag_junction)
+    db.session.commit()
+    db.session.refresh(tag)
