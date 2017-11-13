@@ -5,10 +5,25 @@ import database
 file_routes = Blueprint('file_routes', __name__, template_folder = 'templates')
 
 # main editor page
-@file_routes.route('/')
+@file_routes.route('/', methods = ['POST', 'GET'])
 @login_required
 def home():
-    return render_template('editor.html')
+    notes = database.get_notes_by_user(current_user.username)
+    # on first request of the page, there is nothing in the post request
+    if len(request.form) == 0:
+        return render_template('editor.html', notes = notes, file_contents = '')
+    # if there is content in the request and it is a post request, get the file we want and populate the text area with it
+    elif request.method == 'POST':
+        current_note = None
+        for note in notes:
+            if note.filename == request.form['button']:
+                current_note = note
+                break
+        # if we can't find the requested note, just populate with empty file contents
+        if note is None:
+            return render_template('editor.html', notes = notes, file_contents = '')
+        else:
+            return render_template('editor.html', notes = notes, file_contents = current_note.file_contents)
 
 
 # saves a file to the database and returns the filename and contents

@@ -114,3 +114,4 @@ def add_tag_to_note(filename, tag_name):
     db.session.add(note_tag_junction)
     db.session.commit()
     db.session.refresh(tag)
+
