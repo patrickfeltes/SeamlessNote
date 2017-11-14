@@ -39,6 +39,7 @@
           width: 50%;
         }
         .current_note_tag {
+          margin: 50%;
           height: 400 px;
           width: 50%
         }
@@ -56,33 +57,37 @@
 
 </div>
   <body>
-    <div class = "note_list">
-    <ul>
-      {% for note in notes %}
-        <li>
-          <form action = "" method = "post">
-            <input type = "submit" value = "{{ note.filename }}" name = "button">
-          </form>
-
-        </li>
-      {% endfor %}
-    </ul>
+    <div class = "sidebar">
+      <div class = "note_list"><ul>
+          {% for note in notes %}
+            <li>
+              <form action = "" method = "post">
+                <input type = "submit" value = "{{ note.filename }}" name = "button">
+              </form>
+    
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
 
-    <form action = "{{ url_for('file_routes.save') }}" id = "content" method = "post">
-      <div class = "current_note_title">
-          <input type = "text" name = "filename_field" placeholder="Title">
-      </div>
-      <div class = "current_note_tag"></div>
-          <!-- Pattern is regex for comma delimited list. Found here: https://stackoverflow.com/questions/18745643/how-to-write-regex-to-verify-a-comma-delimited-list-of-values --> 
-          <input type = "text" name = "tags_field" pattern = "^[-\w\s]+(?:,[-\w\s]*)*$" placeholder="Enter tags:">
-      </div>
-      <div>
-          <textarea id = "editor" name = "editor">{{ file_contents }}</textarea>
-      </div>
-      <div class = "save_button">
-          <input type = "submit" value = "Save" name = "save">
-      </div>
-    </form>
+    <div class = "main_screen">
+        <form action = "{{ url_for('file_routes.save') }}" id = "content" method = "post">
+            <div class = "current_note_title">
+                <input type = "text" name = "filename_field" placeholder="Title">
+            </div>
+            <div class = "current_note_tag"></div>
+                <!-- Pattern is regex for comma delimited list. Found here: https://stackoverflow.com/questions/18745643/how-to-write-regex-to-verify-a-comma-delimited-list-of-values --> 
+                <input type = "text" name = "tags_field" pattern = "^[-\w\s]+(?:,[-\w\s]*)*$" placeholder="Enter tags:">
+            </div>
+            <div>
+                <textarea id = "editor" name = "editor">{{ file_contents }}</textarea>
+            </div>
+            <div class = "save_button">
+                <input type = "submit" value = "Save" name = "save">
+            </div>
+          </form>
+    </div>
+    
   </body>
 </html>
