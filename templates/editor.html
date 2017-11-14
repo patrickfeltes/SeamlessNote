@@ -7,6 +7,9 @@
   </head>
 
   <body>
+    <form action = "{{ url_for('authentication.logout') }}" method = "post">
+      <input type = "submit" name = "logout" value = "Logout">
+    </form>
     <ul>
       {% for note in notes %}
         <li>
