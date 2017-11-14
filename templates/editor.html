@@ -10,57 +10,64 @@
                 color: white;
                 text-align: center;
                 padding: 8px 20px;
-                margin: 8px 0;
+                margin: 8px 0%;
                 border: none;
                 font-family: 'Trebuchet MS';
                 font-size: 18px;
                 cursor: pointer;
-                width: 100%;
+                width: 80%;
             }
         input[type=submit]:hover {
           opacity: 0.8;
         }
+        input[type=text] {
+                padding: 10px 10px;
+                margin: 8px 0;
+                display: inline-block;
+                font-family:'Trebuchet MS';
+                font-size: 18px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+        .myList {
+          list-style-type: none;
+        }
         .sidebar {
+          float:left;
           margin: 0% 0%;
-          width: 20%;
-        }
-        .note_header {
-          margin: 0%;
-          height: 200px;
-        }
-        .note_list {
-          margin: 200px;
+          width: 10%;
         }
         .main_screen {
-          margin: 0% 20%;
+          float:right;
+          margin-left: 20%;
+          width: 70%;
         }
         .current_note_title {
-          height: 400 px;
-          width: 50%;
+          float:left;
+          height: 40 px;
+          width: 35%;
         }
         .current_note_tag {
-          margin: 50%;
-          height: 400 px;
-          width: 50%
+          float:right;
+          height: 40 px;
+          width: 35%
         }
-        .save_button {
-          height: 400px;
-          width: 400px;
-        }
-        .editor {
-          margin: 400px;
-          height: 100%;
-          width: 100%;
+        .editor_box {
+          text-align: center;
+          clear: right;
+          padding: 8px 20px;
+          margin: 0% 20%;
+          width: 70%;
         }
     </style>
   </head>
 
-</div>
   <body>
     <div class = "sidebar">
-      <div class = "note_list"><ul>
+      <div>
+        <ul>
           {% for note in notes %}
-            <li>
+            <li class = "myList">
               <form action = "" method = "post">
                 <input type = "submit" value = "{{ note.filename }}" name = "button">
               </form>
@@ -80,10 +87,10 @@
                 <!-- Pattern is regex for comma delimited list. Found here: https://stackoverflow.com/questions/18745643/how-to-write-regex-to-verify-a-comma-delimited-list-of-values --> 
                 <input type = "text" name = "tags_field" pattern = "^[-\w\s]+(?:,[-\w\s]*)*$" placeholder="Enter tags:">
             </div>
-            <div>
+            <div class = "editor_box">
                 <textarea id = "editor" name = "editor">{{ file_contents }}</textarea>
             </div>
-            <div class = "save_button">
+            <div class = "editor_box">
                 <input type = "submit" value = "Save" name = "save">
             </div>
           </form>
