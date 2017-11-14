@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, session, redirect, url_for
 from flask_login import login_required, current_user
 import database
 
@@ -9,9 +9,20 @@ file_routes = Blueprint('file_routes', __name__, template_folder = 'templates')
 @login_required
 def home():
     notes = database.get_notes_by_user(current_user.username)
+    if request.method == 'GET':
+        if 'current_note_name' in session:
+            current_note = None
+            for note in notes:
+                if note.filename == session['current_note_name']:
+                    current_note = note
+                    break
+            return render_template('editor.html', notes = notes, filename = current_note.filename, file_contents = current_note.file_contents)
+        else:
+            return render_template('editor.html', notes = notes, filename = '', file_contents = '')
+
     # on first request of the page, there is nothing in the post request
     if len(request.form) == 0:
-        return render_template('editor.html', notes = notes, file_contents = '')
+        return render_template('editor.html', notes = notes, filename = '', file_contents = '')
     # if there is content in the request and it is a post request, get the file we want and populate the text area with it
     elif request.method == 'POST':
         current_note = None
@@ -19,11 +30,12 @@ def home():
             if note.filename == request.form['button']:
                 current_note = note
                 break
+        session['current_note_name'] = current_note.filename
         # if we can't find the requested note, just populate with empty file contents
         if note is None:
-            return render_template('editor.html', notes = notes, file_contents = '')
+            return render_template('editor.html', notes = notes, filename = '', file_contents = '')
         else:
-            return render_template('editor.html', notes = notes, file_contents = current_note.file_contents)
+            return render_template('editor.html', notes = notes, filename = current_note.filename, file_contents = current_note.file_contents)
 
 
 # saves a file to the database and returns the filename and contents
@@ -47,4 +59,5 @@ def save():
     # all all of the tags to the note
     for tag in tags:
         database.add_tag_to_note(file_name, tag)
-    return file_name + file_contents
+    session['current_note_name'] = file_name    
+    return redirect(url_for('file_routes.home'))

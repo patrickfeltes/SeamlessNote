@@ -13,13 +13,12 @@
           <form action = "" method = "post">
             <input type = "submit" value = "{{ note.filename }}" name = "button">
           </form>
-
         </li>
       {% endfor %}
     </ul>
 
     <form action = "{{ url_for('file_routes.save') }}" id = "content" method = "post">
-      Filename: <input type = "text" name = "filename_field">
+      Filename: <input type = "text" name = "filename_field" value = "{{ filename }}">
       <!-- Pattern is regex for comma delimited list. Found here: https://stackoverflow.com/questions/18745643/how-to-write-regex-to-verify-a-comma-delimited-list-of-values --> 
       Tags: <input type = "text" name = "tags_field" pattern = "^[-\w\s]+(?:,[-\w\s]*)*$">
       <textarea id = "editor" name = "editor">{{ file_contents }}</textarea>
