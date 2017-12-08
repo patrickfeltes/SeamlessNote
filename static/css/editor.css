@@ -1,79 +1,197 @@
-input[name = button] {
-    background-color: rgb(0, 97, 255);
+input[name = logout] {
+    background-color: #bd0909;
     color: white;
     text-align: center;
-    padding: 8px 20px;
-    margin: 8px 0%;
+    padding: 8px;
     border: none;
+    border-radius: 5px;
     font-family: 'Trebuchet MS';
     font-size: 18px;
     cursor: pointer;
-    width: 80%;
+
+    margin-top: 15px;
+    margin-right: -100px;
+    height: 40px;
+    width: 60%;
 }
 
-input[name = button]:hover {
-    opacity: 0.8;
-}
-
-input[name = logout], input[name = save] {
-    background-color: rgb(0, 97, 255);
+input[name = save] {
+    display:block;
+    background-color: rgb(0,99,255);
     color: white;
     text-align: center;
-    padding: 8px 20px;
-    margin: 8px 0%;
+    padding: 8px;
+    padding-right: 2px;
+    margin-top: 15px;
+    margin-left: 5vw;
     border: none;
-    font-family: 'Trebuchet MS';
-    font-size: 18px;
+    border-radius: 5px;
+    font-family: "Trebuchet MS";
+    font-size: 30px;
     cursor: pointer;
-    width: 80%;
+    height: 50px;
+    width: 62vw;
 }
 
-input[name = logout], input[name = save] {
+input[name = logout]:hover, input[name = save]:hover, input[name = button]:hover {
     opacity: 0.8;
 }
 
-input[type=text] {
-    padding: 10px 10px;
-    margin: 8px 0;
-    display: inline-block;
+input[name = filename_field]:focus, input[name = tags_field]:focus, textarea[id = editor]:focus {
+    border: 2px solid rgb(40, 145, 44);
+    padding: 9px 10px;
+}
+
+input[name=filename_field] {
+    display: block;
+    border: 0px black;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+    margin-left: 5vw;
+    margin-right: 0vw;
+    float:left;
+    text-align: center;
+    padding: 10px 10px;    
     font-family:'Trebuchet MS';
     font-size: 18px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+    font-weight: bold;
+    width: 39vw;
 }
 
-.myList {
-    list-style-type: none;
+input[name=tags_field] {
+    display: block;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+    margin-left: 0vw;
+    margin-right: 6vw;
+    float: right;
+    padding: 10px 10px;    
+    text-align: center;
+    font-family:'Trebuchet MS';
+    font-size: 18px;
+    font-style: italic;
+    border: 0px;
+    width: 21vw;
+}
+
+textarea[id=editor] {
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 10px;
+    border-radius: 5px;
+    margin-left: 5vw;
+    max-width: 62vw;
+    max-height: 70vh;
+    font-family: 'Trebuchet MS';
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    grid-column-gap: 0vw;
+    grid-template-rows: 70px 1fr;
+    width: 100vw;
+    height: 100vh;
+    justify-items: stretch;
+    /* background: url("https://static.pexels.com/photos/139306/pexels-photo-139306.jpeg"); */
+    background: url("http://www.psdgraphics.com/file/dark-metal-texture.jpg") no-repeat;
+    background-position-y: -2vh;
+    background-size: 100vw 102vh;
+    margin: auto;
+    padding: 0px;
+    overflow-x: hidden;
+}
+
+.header1 {
+    grid-row: 1 / 2;
+    grid-column: 3 / 12;
+    font-family: 'Trebuchet MS';
+    font-size: auto;
+    color: white;
+    text-align: center;
+    justify-self: stretch;
+}
+
+.header2 {
+    grid-row: 1 / 2;
+    grid-column: 10 / 12;
+    margin-right: 7vw;
+    font-family: 'Trebuchet MS';
+    text-align: center;
+    justify-self: stretch;
 }
 
 .sidebar {
-    float:left;
-    margin: 0% 0%;
-    width: 10%;
-}
-.main_screen {
-    float:right;
-    margin-left: 20%;
-    width: 70%;
-}
-
-.current_note_title {
-    float:left;
-    height: 40 px;
-    width: 35%;
+    margin-top: 79px;
+    grid-row: 1 / 3;
+    grid-column: 1 / 4;
+    font-family: 'Trebuchet MS';
+    background: url("https://gadgetflowcdn.com/wp-content/themes/thegadgetflow4/images/categories/random_large/all_things_wood.jpg");
+    /* background: url("http://infectedhydro.com/wp-content/uploads/2016/04/Brushed-Aluminum-450x450.jpg") no-repeat; */
+    justify-self: stretch;
 }
 
-.current_note_tag {
-    float:right;
-    height: 40 px;
-    width: 35%
-}
-
-.editor_box {
+input[name = button] {
+    /* background: rgb(40, 145, 44); */
+    background-image: url("http://infectedhydro.com/wp-content/uploads/2016/04/Brushed-Aluminum-450x450.jpg");
+    /* background: url("https://gadgetflowcdn.com/wp-content/themes/thegadgetflow4/images/categories/random_large/all_things_wood.jpg"); */
+    border-radius: 5px;
+    color: #523A29;
     text-align: center;
-    clear: right;
-    padding: 8px 20px;
-    margin: 0% 20%;
-    width: 70%;
-    height: 60%;
+    padding: 8px 10px;
+    margin: 5px 0px;
+    border: none;
+    font-family: 'Trebuchet MS';
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+input[name = addbutton] {
+    /* background: purple; */
+    background: rgb(40, 145, 44);
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    padding: 8px 10px;
+    margin: 5px 0px;
+    border: none;
+    font-family: 'Trebuchet MS';
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 1px;
+
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 0px;
+}
+
+.sidebar_title {
+    grid-row: 1 / 3;
+    grid-column: 1 / 4;
+    background: url("https://gadgetflowcdn.com/wp-content/themes/thegadgetflow4/images/categories/random_large/all_things_wood.jpg");
+    /* background-image: url("http://infectedhydro.com/wp-content/uploads/2016/04/Brushed-Aluminum-450x450.jpg"); */
+    text-align: center;
+    font-family: 'Trebuchet MS';
+    color: white;
+    /* background: white; */
+}
+.main {
+    grid-row: 2 / 3;
+    grid-column: 4 / 12;
+    justify-self: stretch;
 }
