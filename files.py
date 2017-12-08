@@ -79,10 +79,11 @@ def save():
         session['current_note_name'] = file_name
     else:
         database.add_new_note(file_name, file_contents, current_user.username)
-        # all all of the tags to the note
-        for tag in tags:
-            database.add_tag_to_note(file_name, tag)
         session['current_note_name'] = file_name
+        
+    # add tags to notes
+    for tag in tags:
+        database.add_tag_to_note(file_name, tag)
 
     session['recommended_tags'] = lda.suggest_tags(file_contents)
 
