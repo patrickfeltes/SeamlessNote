@@ -16,12 +16,16 @@ def home():
                 if note.filename == session['current_note_name']:
                     current_note = note
                     break
-            return render_template('editor.html', notes = notes, filename = current_note.filename, file_contents = current_note.file_contents)
+            if current_note == None:
+                return render_template('editor.html', notes = notes, filename = '', file_contents = '')
+            else:
+                return render_template('editor.html', notes = notes, filename = current_note.filename, file_contents = current_note.file_contents)
         else:
             return render_template('editor.html', notes = notes, filename = '', file_contents = '')
 
-    # on first request of the page, there is nothing in the post request
-    if len(request.form) == 0:
+    # if there are no arguments in the request or the request is to add a file, allow the user to save a new file
+    if len(request.form) == 0 or 'addbutton' in request.form:
+        session['current_note_name'] = None
         return render_template('editor.html', notes = notes, filename = '', file_contents = '')
     # if there is content in the request and it is a post request, get the file we want and populate the text area with it
     elif request.method == 'POST':
@@ -36,7 +40,6 @@ def home():
             return render_template('editor.html', notes = notes, filename = '', file_contents = '')
         else:
             return render_template('editor.html', notes = notes, filename = current_note.filename, file_contents = current_note.file_contents)
-
 
 # saves a file to the database and returns the filename and contents
 @file_routes.route('/save', methods = ['GET', 'POST'])
@@ -55,9 +58,16 @@ def save():
         file_contents = request.args.get('editor')
         # split tags and convert to set of strings
         tags = set(map(lambda x: str(x.strip()), request.args('tags_field').split(',')))
-    database.add_new_note(file_name, file_contents, current_user.username)
-    # all all of the tags to the note
-    for tag in tags:
-        database.add_tag_to_note(file_name, tag)
-    session['current_note_name'] = file_name    
+    
+    # if there is a current file, we need to update it, not try to make a new entry
+    if 'current_note_name' in session and session['current_note_name'] is not None:
+        database.update_note(session['current_note_name'], file_name, file_contents, current_user.username)
+        session['current_note_name'] = file_name
+    else:
+        database.add_new_note(file_name, file_contents, current_user.username)
+        # all all of the tags to the note
+        for tag in tags:
+            database.add_tag_to_note(file_name, tag)
+        session['current_note_name'] = file_name
+
     return redirect(url_for('file_routes.home'))

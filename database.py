@@ -90,7 +90,18 @@ def add_new_note(filename, file_contents, username):
     db.session.add(note)
     db.session.commit()
     db.session.refresh(note)
-
+# given the old name of a note and the username, update the note
+def update_note(old_name, new_name, file_contents, username):
+    notes = get_notes_by_user(username)
+    note_to_update = None
+    for note in notes:
+        if note.filename == old_name:
+            note_to_update = note
+            break
+    note_to_update.filename = new_name
+    note_to_update.file_contents = file_contents
+    db.session.commit()
+    db.session.refresh(note_to_update)
 # gets all notes for a specific user
 def get_notes_by_user(username):
     user = find_user_by_name(username)
