@@ -39,6 +39,11 @@
       </div>
     
       <div class = "main">
+          {% for tag in recommended_tags %}
+            <form action = "" method = "post">
+              <input type = "submit" value = "{{ tag }}" name = "recommendedTags">
+            </form>
+          {% endfor %}
           <form action = "{{ url_for('file_routes.save') }}" id = "content" method = "post">
             <input type = "text" name = "filename_field" placeholder="Title" value = "{{ filename }}" >
             <!-- Pattern is regex for comma delimited list. Found here: https://stackoverflow.com/questions/18745643/how-to-write-regex-to-verify-a-comma-delimited-list-of-values --> 
