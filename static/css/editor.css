@@ -44,39 +44,74 @@ input[name = filename_field]:focus, input[name = tags_field]:focus, textarea[id 
 
 input[name=filename_field] {
     display: block;
-    border: 0px black;
-    border-radius: 5px;
-    box-sizing: border-box;
-    margin-top: 1vw;
+    float: left;
+
+    margin-top: 4px;
     margin-bottom: 1vw;
     margin-left: 5vw;
     margin-right: 0vw;
-    float:left;
-    text-align: center;
-    padding: 10px 10px;    
+
+    border: 0px black;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px 10px; 
+
+    text-align: center;   
     font-family:'Trebuchet MS';
     font-size: 18px;
     font-weight: bold;
-    width: 39vw;
+
+    width: 33vw;
 }
 
 input[name=tags_field] {
     display: block;
-    border: none;
-    box-sizing: border-box;
-    border-radius: 5px;
-    margin-top: 1vw;
+
+    margin-top: 12px;
     margin-bottom: 1vw;
-    margin-left: 0vw;
-    margin-right: 6vw;
-    float: right;
-    padding: 10px 10px;    
+    margin-left: 5vw;
+    margin-right: 0vw;
+
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px 10px; 
+
     text-align: center;
     font-family:'Trebuchet MS';
     font-size: 18px;
     font-style: italic;
-    border: 0px;
-    width: 21vw;
+
+    width: 62vw;
+}
+
+.tagbox {
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-right: 85px;
+    margin-bottom: -12px;
+}
+
+input[name = recommendedTags] {
+    margin: 4px;
+    float:right;
+
+    background: rgb(40, 145, 44);
+    color: white;
+
+    border: 0px black;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px 10px; 
+
+    text-align: center;   
+    font-family:'Trebuchet MS';
+    font-size: 19px;
+
+    cursor: pointer;
+
+    height: auto;
+    width: 5vw;
 }
 
 textarea[id=editor] {
@@ -86,15 +121,16 @@ textarea[id=editor] {
     border-radius: 5px;
     margin-left: 5vw;
     max-width: 62vw;
-    max-height: 70vh;
+    max-height: 55vh;
     font-family: 'Trebuchet MS';
 }
 
 .container {
     display: grid;
     grid-template-columns: repeat(11, 1fr);
-    grid-column-gap: 0vw;
-    grid-template-rows: 70px 1fr;
+    grid-column-gap: 0px;
+    grid-template-rows: 100px 1fr 20px;
+    grid-row-gap: 0px;
     width: 100vw;
     height: 100vh;
     justify-items: stretch;
@@ -128,7 +164,8 @@ textarea[id=editor] {
 
 .sidebar {
     margin-top: 79px;
-    grid-row: 1 / 3;
+    overflow-y: auto;
+    grid-row: 1 / 4;
     grid-column: 1 / 4;
     font-family: 'Trebuchet MS';
     background: url("https://gadgetflowcdn.com/wp-content/themes/thegadgetflow4/images/categories/random_large/all_things_wood.jpg");
@@ -181,7 +218,7 @@ ul {
 }
 
 .sidebar_title {
-    grid-row: 1 / 3;
+    grid-row: 1 / 4;
     grid-column: 1 / 4;
     background: url("https://gadgetflowcdn.com/wp-content/themes/thegadgetflow4/images/categories/random_large/all_things_wood.jpg");
     /* background-image: url("http://infectedhydro.com/wp-content/uploads/2016/04/Brushed-Aluminum-450x450.jpg"); */
@@ -191,7 +228,7 @@ ul {
     /* background: white; */
 }
 .main {
-    grid-row: 2 / 3;
+    grid-row: 2 / 4;
     grid-column: 4 / 12;
     justify-self: stretch;
 }
