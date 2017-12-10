@@ -129,7 +129,7 @@ def get_notes_by_tag_and_user(username, tag):
     all_notes = get_notes_by_user(username)
     all_tagged_notes = []
     for note in all_notes:
-        junctions = list(NoteTagJunction.query.filter_by(note_id = note.id))
+        junctions = NoteTagJunction.query.filter_by(note_id = note.id).all()
         for junction in junctions:
             if tag.id == junction.tag_id:
                 all_tagged_notes.append(note)
@@ -137,6 +137,17 @@ def get_notes_by_tag_and_user(username, tag):
 
 def find_note_by_name(filename):
     return Note.query.filter_by(filename = filename).first()
+
+def get_tag_note_dict(username):
+    user = find_user_by_name(username)
+    tags = Tag.query.filter_by(user_id = user.id).all()
+    d = {}
+    for tag in tags:
+        d[tag] = []
+        junctions = NoteTagJunction.query.filter_by(tag_id = tag.id, user_id = user.id).all()
+        for junction in junctions:
+            d[tag].append(Note.query.filter_by(id = junction.note_id).first())
+    return d
 
 # adds a tag to the tag table if it doesn't exist, then links them in the junction table
 def add_tag_to_note(filename, tag_name, username):
