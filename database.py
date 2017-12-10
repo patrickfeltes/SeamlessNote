@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
 class Note(db.Model):
     __tablename__ = 'notes'
     id = db.Column(db.Integer, primary_key = True)
-    filename = db.Column(db.String(100), unique = True)
+    filename = db.Column(db.String(100), unique = False)
     file_contents = db.Column(db.String(20000), unique = False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
@@ -38,13 +38,15 @@ class Note(db.Model):
 class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key = True)
-    tag_name = db.Column(db.String(100), unique = True)
+    tag_name = db.Column(db.String(100), unique = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __init__(self, tag_name):
+    def __init__(self, tag_name, user_id):
         self.tag_name = tag_name
+        self.user_id = user_id
 
     def __repr__(self):
-        return 'Tag: ' + self.tag_name
+        return 'Tag: ' + self.tag_name + " " + str(self.user_id) 
 
 # NoteTagJunction model for the note_tab_junctions table
 class NoteTagJunction(db.Model):
@@ -52,10 +54,12 @@ class NoteTagJunction(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     note_id = db.Column(db.Integer, db.ForeignKey('notes.id'))
     tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __init__(self, note_id, tag_id):
+    def __init__(self, note_id, tag_id, user_id):
         self.note_id = note_id
         self.tag_id = tag_id
+        self.user_id = user_id
 
     def __repr__(self):
         return 'NoteTagJunction: ' + str(self.note_id) + ' ' + str(self.tag_id)
@@ -125,7 +129,7 @@ def get_notes_by_tag_and_user(username, tag):
     all_notes = get_notes_by_user(username)
     all_tagged_notes = []
     for note in all_notes:
-        junctions = list(NoteTagJunction.query.filter_by(note_id = note.id))
+        junctions = NoteTagJunction.query.filter_by(note_id = note.id).all()
         for junction in junctions:
             if tag.id == junction.tag_id:
                 all_tagged_notes.append(note)
@@ -134,17 +138,35 @@ def get_notes_by_tag_and_user(username, tag):
 def find_note_by_name(filename):
     return Note.query.filter_by(filename = filename).first()
 
+def get_tag_note_dict(username):
+    user = find_user_by_name(username)
+    tags = Tag.query.filter_by(user_id = user.id).all()
+    d = {}
+    for tag in tags:
+        d[tag] = []
+        junctions = NoteTagJunction.query.filter_by(tag_id = tag.id, user_id = user.id).all()
+        for junction in junctions:
+            d[tag].append(Note.query.filter_by(id = junction.note_id).first())
+    return d
+
 # adds a tag to the tag table if it doesn't exist, then links them in the junction table
-def add_tag_to_note(filename, tag_name):
+def add_tag_to_note(filename, tag_name, username):
+    if len(tag_name.strip()) == 0:
+        return
     note = find_note_by_name(filename)
-    tag = Tag.query.filter_by(tag_name = tag_name).first()
-    if tag is None:
-        tag = Tag(tag_name)
+    user = find_user_by_name(username)
+    already_existing = Tag.query.filter_by(tag_name = tag_name, user_id = user.id).first()
+    print already_existing
+    tag = None
+    if already_existing == None:
+        tag = Tag(tag_name, user.id)
         db.session.add(tag)
         db.session.commit()
         db.session.refresh(tag)
+    else:
+        tag = already_existing
 
-    note_tag_junction = NoteTagJunction(note.id, tag.id)
+    note_tag_junction = NoteTagJunction(note.id, tag.id, user.id)
     db.session.add(note_tag_junction)
     db.session.commit()
     db.session.refresh(tag)

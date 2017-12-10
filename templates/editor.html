@@ -5,6 +5,7 @@
     <title>Editor</title>
     <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename='css/main.css') }}">
     <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename='css/editor.css') }}">
+    <script type="text/javascript" src="../static/js/CollapsibleLists.js"></script>
   </head>
 
   <body>
@@ -24,12 +25,19 @@
       </div>
 
       <div class = "sidebar">
-        <ul>
-          {% for note in notes %}
-            <li class = "myList">
-              <form action = "" method = "post">
-                <input type = "submit" value = "{{ note.filename }}" name = "button">
-              </form>
+        <ul class="collapsibleList">
+          {% for tag in tag_notes_dict %}
+            <li>
+              {{ tag.tag_name }}
+              {% for note in tag_notes_dict[tag] %}
+                <ul>
+                  <li class = "myList">
+                    <form action = "" method = "post">
+                      <input type = "submit" value = "{{ note.filename }}" name = "button">
+                    </form>
+                  </li>
+                </ul>
+              {% endfor %}
             </li>
           {% endfor %}
           <form action = "" method = "post">
@@ -37,6 +45,10 @@
           </form>
         </ul>
       </div>
+
+      <script type="text/javascript">
+        CollapsibleLists.apply()
+      </script>
 
       <div class = "tagbox">
         {% for tag in recommended_tags %}
