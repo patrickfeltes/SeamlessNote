@@ -27,10 +27,10 @@
       <div class = "sidebar">
         <ul class="collapsibleList">
           {% for tag in tag_notes_dict %}
-            <li>
+            <li class = "tagHeader">
               {{ tag.tag_name }}
               {% for note in tag_notes_dict[tag] %}
-                <ul>
+                <ul class = "notesList">
                   <li class = "myList">
                     <form action = "" method = "post">
                       <input type = "submit" value = "{{ note.filename }}" name = "button">
