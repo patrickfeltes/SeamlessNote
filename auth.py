@@ -11,6 +11,7 @@ authentication = Blueprint('authentication', __name__, template_folder = 'templa
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('file_routes.home'))
+    session.clear()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']

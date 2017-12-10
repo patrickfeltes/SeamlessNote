@@ -33,7 +33,7 @@ def home():
                 current_note = note
                 break
         tag = request.form['recommendedTags']
-        database.add_tag_to_note(session['current_note_name'], tag)
+        database.add_tag_to_note(session['current_note_name'], tag, current_user.username)
         return render_template('editor.html', notes = notes, filename = current_note.filename, file_contents = current_note.file_contents, recommendedTags = [])
 
 
@@ -83,7 +83,7 @@ def save():
         
     # add tags to notes
     for tag in tags:
-        database.add_tag_to_note(file_name, tag)
+        database.add_tag_to_note(file_name, tag, current_user.username)
 
     session['recommended_tags'] = lda.suggest_tags(file_contents)
 
