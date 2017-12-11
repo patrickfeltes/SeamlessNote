@@ -26,9 +26,9 @@
 
       <div class = "sidebar">
         <ul class="collapsibleList">
-          {% for tag in tag_notes_dict %}
+          {% for tag in tag_notes_dict.keys() %}
             <li class = "tagHeader">
-              {{ tag.tag_name }}
+              {{ tag }}
               {% for note in tag_notes_dict[tag] %}
                 <ul class = "notesList">
                   <li class = "myList">

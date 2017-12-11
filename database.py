@@ -143,10 +143,10 @@ def get_tag_note_dict(username):
     tags = Tag.query.filter_by(user_id = user.id).all()
     d = {}
     for tag in tags:
-        d[tag] = []
+        d[tag.tag_name] = []
         junctions = NoteTagJunction.query.filter_by(tag_id = tag.id, user_id = user.id).all()
         for junction in junctions:
-            d[tag].append(Note.query.filter_by(id = junction.note_id).first())
+            d[tag.tag_name].append(Note.query.filter_by(id = junction.note_id).first())
     return d
 
 # adds a tag to the tag table if it doesn't exist, then links them in the junction table

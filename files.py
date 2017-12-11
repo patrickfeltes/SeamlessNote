@@ -13,6 +13,8 @@ def home():
         session['recommended_tags'] = []
     notes = database.get_notes_by_user(current_user.username)
     tag_notes_dict = database.get_tag_note_dict(current_user.username)
+    tag_notes_dict['All Notes'] = database.get_notes_by_user(current_user.username)
+
     if request.method == 'GET':
         if 'current_note_name' in session:
             current_note = None
