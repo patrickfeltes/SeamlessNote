@@ -141,15 +141,15 @@ def find_note_by_name(filename):
 def get_tag_note_list(username):
     user = find_user_by_name(username)
     tags = Tag.query.filter_by(user_id = user.id).all()
-    tag_names = [tag.tag_name.encode('utf-8') for tag in tags]
-    tag_names = sorted(tag_names, key = lambda s: s.lower())
+    tags = sorted(tags, key = lambda tag: tag.tag_name.lower())
     lst = []
-    for tag_name in tag_names:
+    for tag in tags:
         temp = []
         junctions = NoteTagJunction.query.filter_by(tag_id = tag.id, user_id = user.id).all()
         for junction in junctions:
             temp.append(Note.query.filter_by(id = junction.note_id).first())
-        lst.append((tag_name, temp))
+        lst.append((tag.tag_name, temp))
+    print lst
     return lst
 
 # adds a tag to the tag table if it doesn't exist, then links them in the junction table
@@ -159,9 +159,8 @@ def add_tag_to_note(filename, tag_name, username):
     note = find_note_by_name(filename)
     user = find_user_by_name(username)
     already_existing = Tag.query.filter_by(tag_name = tag_name, user_id = user.id).first()
-    print already_existing
     tag = None
-    if already_existing == None:
+    if already_existing is None:
         tag = Tag(tag_name, user.id)
         db.session.add(tag)
         db.session.commit()
