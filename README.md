@@ -1,7 +1,15 @@
 # Seamless Note
+## Overview
+Seamless Note is a note taking website with a tag-based organizational system. Our system seamlessly recommends tags for your notes based on their contents.
+
+## Team Members
+- Manuel A Hernandez-Estrada Jr(manuelh3)
+- Rahul Miriyala(rmiriya2)
+- Abhay Varmaraja(abhaymv2)
+- Patrick Feltes(pfeltes2)
+- PM: Aria Malkani
 
 ## Installation Instructions
-- Follow MySQL Set Up Instructions.
 - Install [Git](https://git-scm.com/) and set it up. Instructions are [here](https://help.github.com/articles/set-up-git/).
 - Install [Python](https://www.python.org/) >= 2.7 and make sure you have pip installed.
 - Clone this repository, run `git clone https://github.com/CS196Illinois/SeamlessNote.git`
