@@ -176,7 +176,7 @@ def add_tag_to_note(filename, tag_name, username):
     else:
         tag = already_existing
 
-    already_existing_junction = NoteTagJunction.query.filter_by(note_id = note.id, tag_id = tag.id).first()
+    already_existing_junction = NoteTagJunction.query.filter_by(note_id = note.id, tag_id = tag.id, user_id = user.id).first()
     if already_existing is None:
         note_tag_junction = NoteTagJunction(note.id, tag.id, user.id)
         db.session.add(note_tag_junction)
