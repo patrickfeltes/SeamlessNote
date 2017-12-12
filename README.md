@@ -4,8 +4,8 @@
 - Follow MySQL Set Up Instructions.
 - Install [Git](https://git-scm.com/) and set it up. Instructions are [here](https://help.github.com/articles/set-up-git/).
 - Install [Python](https://www.python.org/) >= 2.7 and make sure you have pip installed.
-- Install all Python modules: run `pip2 install -r requirements.txt` when in the SeamlessNote directory.
 - Clone this repository, run `git clone https://github.com/CS196Illinois/SeamlessNote.git`
+- Install all Python modules: run `pip2 install -r requirements.txt` when in the SeamlessNote directory.
 - Install [MySQL Community Server](https://dev.mysql.com/downloads/mysql/).
 - Install [MySQL Workbench](https://dev.mysql.com/downloads/workbench/).
 - Follow MySQL set up instructions (see below).
