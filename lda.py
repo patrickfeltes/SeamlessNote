@@ -1,6 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 
+# given a files contents use LDA to suggest a max of five topics
 def suggest_tags(file_contents):
     document = [file_contents]
     number_features = 1000
@@ -9,7 +10,7 @@ def suggest_tags(file_contents):
     tf_feature_names = tf_vectorizer.get_feature_names()
 
     number_topics = 1
-    lda = LatentDirichletAllocation(n_components=number_topics, max_iter=1, learning_method='online', learning_offset=50.,random_state=0).fit(tf)
+    lda = LatentDirichletAllocation(n_components=number_topics, max_iter=5, learning_method='online', learning_offset=50., random_state=0).fit(tf)
 
     number_top_words = 5
     for topic_idx, topic in enumerate(lda.components_):

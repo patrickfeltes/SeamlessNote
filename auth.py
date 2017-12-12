@@ -19,7 +19,7 @@ def login():
         if user is not None and bcrypt.check_password_hash(user.hashed_password, password) and user.is_active:
             login_user(user, remember = False)
             # go to the editor screen
-            return redirect('/')
+            return redirect(url_for('file_routes.home'))
 
     return render_template('login.html')
 
@@ -33,7 +33,7 @@ def register():
         password = request.form['password']
         email = request.form['email']
         database.add_user(username, email, bcrypt.generate_password_hash(password, rounds = 12))
-        return redirect('/login')
+        return redirect(url_for('authentication.login'))
 
     return render_template('register.html')
 
@@ -47,7 +47,7 @@ def logout():
 # if there isn't proper authorization, go to the login page
 @login_manager.unauthorized_handler
 def unauthorized_callback():
-    return redirect('/login')
+    return redirect(url_for('authentication.login'))
 
 # loads a user when they are logged in 
 @login_manager.user_loader
