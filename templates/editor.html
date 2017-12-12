@@ -25,7 +25,7 @@
       </div>
 
       <div class = "sidebar">
-        <input type="text" id="searchField" onkeyup="filter()" placeholder="Search for tags...">
+        <input type="text" id="searchField" onkeyup="filter()" placeholder = "Search for tags..." onblur="this.placeholder = 'Search for tags...'" onfocus="this.placeholder = ''">
         <ul class="collapsibleList">
           {% for item in tag_notes_list %}
             <li class = "tagHeader" name = "{{ item[0] }}">
@@ -80,7 +80,7 @@
           <input type = "text" name = "filename_field" placeholder="Title" value = "{{ filename }}" >
           <!-- Pattern is regex for comma delimited list. Found here: https://stackoverflow.com/questions/18745643/how-to-write-regex-to-verify-a-comma-delimited-list-of-values --> 
           <input type = "text" name = "tags_field" pattern = "^[-\w\s]+(?:,[-\w\s]*)*$" placeholder="Manual Tags:">
-          <textarea id = "editor" name = "editor" placeholder="note contents">{{ file_contents }}</textarea>
+          <textarea id = "editor" name = "editor">{{ file_contents }}</textarea>
           <input type = "submit" value = "Save" name = "save">
         </form>
       </div>
