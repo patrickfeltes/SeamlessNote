@@ -25,9 +25,10 @@
       </div>
 
       <div class = "sidebar">
+        <input type="text" id="searchField" onkeyup="filter()" placeholder="Search for tags...">
         <ul class="collapsibleList">
           {% for item in tag_notes_list %}
-            <li class = "tagHeader">
+            <li class = "tagHeader" name = "{{ item[0] }}">
               {{ item[0] }}
               {% for note in item[1] %}
                 <ul class = "notesList">
@@ -48,6 +49,22 @@
 
       <script type="text/javascript">
         CollapsibleLists.apply()
+      </script>
+
+      <script type="text/javascript">
+        function filter() {
+          var list = document.getElementsByClassName("collapsibleList")[0].getElementsByTagName("li");
+          var query = document.getElementById("searchField").value.toLowerCase();
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].className.indexOf('tagHeader') > -1) {
+              if (list[i].getAttribute('name').toLowerCase().indexOf(query) > -1) {
+                list[i].style.display = "";
+              } else {
+                list[i].style.display = "none";
+              }
+            }
+          }
+        }
       </script>
 
       <div class = "tagbox">
