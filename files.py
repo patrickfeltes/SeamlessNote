@@ -29,6 +29,9 @@ def home():
         else:
             return render_template('editor.html', tag_notes_list = tag_notes_list, filename = '', file_contents = '', recommended_tags = session['recommended_tags'])
 
+    if 'button' in request.form or 'addbutton' in request.form:
+        session['recommended_tags'] = []
+
     if 'recommendedTags' in request.form:
         current_note = None
         for note in notes:

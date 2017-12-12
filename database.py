@@ -149,7 +149,6 @@ def get_tag_note_list(username):
         for junction in junctions:
             temp.append(Note.query.filter_by(id = junction.note_id).first())
         lst.append((tag.tag_name, temp))
-    print lst
     return lst
 
 # adds a tag to the tag table if it doesn't exist, then links them in the junction table
