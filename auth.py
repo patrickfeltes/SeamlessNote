@@ -40,7 +40,7 @@ def register():
 @authentication.route('/logout', methods = ['GET', 'POST'])
 @login_required
 def logout():
-    session.pop('current_note_name', None)
+    session.clear()
     logout_user()
     return redirect(url_for('authentication.login'))
 
