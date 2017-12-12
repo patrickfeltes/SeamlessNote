@@ -121,29 +121,6 @@ def get_notes_by_user(username):
     notes = Note.query.filter_by(user_id = user.id)
     return list(notes)
 
-def get_tags_by_user(username):
-    return get_tags_by_notes(get_notes_by_user(username))
-
-def get_tags_by_notes(notes):
-    tags = []
-    for note in notes:
-        junctions=list(NoteTagJunction.query.filter_by(note_id = note.id))
-        for junction in junctions:
-            temp=list(Tag.query.filter_by(id =junction.tag_id))
-            if temp is not None and len(temp)!=0:
-                tags.extend(temp)
-    return tags
-
-def get_notes_by_tag_and_user(username, tag):
-    all_notes = get_notes_by_user(username)
-    all_tagged_notes = []
-    for note in all_notes:
-        junctions = NoteTagJunction.query.filter_by(note_id = note.id).all()
-        for junction in junctions:
-            if tag.id == junction.tag_id:
-                all_tagged_notes.append(note)
-    return all_tagged_notes
-
 def find_note_by_name(filename):
     return Note.query.filter_by(filename = filename).first()
 
@@ -177,8 +154,8 @@ def add_tag_to_note(filename, tag_name, username):
         tag = already_existing
 
     already_existing_junction = NoteTagJunction.query.filter_by(note_id = note.id, tag_id = tag.id, user_id = user.id).first()
-    if already_existing is None:
+    if already_existing_junction is None:
         note_tag_junction = NoteTagJunction(note.id, tag.id, user.id)
         db.session.add(note_tag_junction)
         db.session.commit()
-        db.session.refresh(tag)
+        db.session.refresh(note_tag_junction)
