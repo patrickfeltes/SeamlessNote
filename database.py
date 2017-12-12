@@ -138,16 +138,19 @@ def get_notes_by_tag_and_user(username, tag):
 def find_note_by_name(filename):
     return Note.query.filter_by(filename = filename).first()
 
-def get_tag_note_dict(username):
+def get_tag_note_list(username):
     user = find_user_by_name(username)
     tags = Tag.query.filter_by(user_id = user.id).all()
-    d = {}
-    for tag in tags:
-        d[tag.tag_name] = []
+    tag_names = [tag.tag_name.encode('utf-8') for tag in tags]
+    tag_names = sorted(tag_names, key = lambda s: s.lower())
+    lst = []
+    for tag_name in tag_names:
+        temp = []
         junctions = NoteTagJunction.query.filter_by(tag_id = tag.id, user_id = user.id).all()
         for junction in junctions:
-            d[tag.tag_name].append(Note.query.filter_by(id = junction.note_id).first())
-    return d
+            temp.append(Note.query.filter_by(id = junction.note_id).first())
+        lst.append((tag_name, temp))
+    return lst
 
 # adds a tag to the tag table if it doesn't exist, then links them in the junction table
 def add_tag_to_note(filename, tag_name, username):
