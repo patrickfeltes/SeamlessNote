@@ -89,11 +89,19 @@ def add_user(name, email, password):
     db.session.refresh(user)
 
 # adds a new note to the database corresponding to the current user
+# returns true if succesful, false otherwise
 def add_new_note(filename, file_contents, username):
-    note = Note(filename, file_contents, find_user_id_by_name(username))
-    db.session.add(note)
-    db.session.commit()
-    db.session.refresh(note)
+    user = find_user_by_name(username)
+    already_existing = Note.query.filter_by(filename = filename, user_id = user.id).first()
+    if already_existing is None:  
+        note = Note(filename, file_contents, user.id)
+        db.session.add(note)
+        db.session.commit()
+        db.session.refresh(note)
+        return True
+    else:
+        return False
+
 # given the old name of a note and the username, update the note
 def update_note(old_name, new_name, file_contents, username):
     notes = get_notes_by_user(username)
@@ -106,7 +114,7 @@ def update_note(old_name, new_name, file_contents, username):
     note_to_update.file_contents = file_contents
     db.session.commit()
     db.session.refresh(note_to_update)
-    
+
 # gets all notes for a specific user
 def get_notes_by_user(username):
     user = find_user_by_name(username)
@@ -168,7 +176,9 @@ def add_tag_to_note(filename, tag_name, username):
     else:
         tag = already_existing
 
-    note_tag_junction = NoteTagJunction(note.id, tag.id, user.id)
-    db.session.add(note_tag_junction)
-    db.session.commit()
-    db.session.refresh(tag)
+    already_existing_junction = NoteTagJunction.query.filter_by(note_id = note.id, tag_id = tag.id).first()
+    if already_existing is None:
+        note_tag_junction = NoteTagJunction(note.id, tag.id, user.id)
+        db.session.add(note_tag_junction)
+        db.session.commit()
+        db.session.refresh(tag)

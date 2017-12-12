@@ -20,7 +20,7 @@ def home():
     if request.method == 'GET':
         if 'current_note_name' not in session:
             return render_blank(tag_notes_list)
-        
+
         current_note = find_note(notes, session['current_note_name'])
         return render_editor(tag_notes_list, current_note.filename, current_note.file_contents, session['recommended_tags'])
     else:
@@ -78,16 +78,18 @@ def save():
     tags = set(map(lambda x: str(x.strip()), request.form['tags_field'].split(',')))
     
     # if there is a current file, we need to update it, not try to make a new entry
+    success = True
     if 'current_note_name' in session and session['current_note_name'] is not None:
         database.update_note(session['current_note_name'], file_name, file_contents, current_user.username)
         session['current_note_name'] = file_name
     else:
-        database.add_new_note(file_name, file_contents, current_user.username)
+        success = database.add_new_note(file_name, file_contents, current_user.username)
         session['current_note_name'] = file_name
         
-    # add tags to notes
-    for tag in tags:
-        database.add_tag_to_note(file_name, tag, current_user.username)
+    # add tags to notes if the note was added
+    if success:
+        for tag in tags:
+            database.add_tag_to_note(file_name, tag, current_user.username)
 
     # run lda code to suggest 
     session['recommended_tags'] = lda.suggest_tags(file_contents)
